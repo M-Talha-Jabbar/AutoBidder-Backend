@@ -73,6 +73,35 @@ const vehicle_report_create = (req, res) => {
 };
 
 
+// function getVehicle(regno){
+//     db_connection.getConnection((err, connection) => {
+
+//         if(err) console.log(err);
+
+//         else{
+//             console.log('Connection got: ', connection.threadId);
+
+//             connection.query(
+//                 `SELECT * FROM vehicles where RegNo=${regno};`, (err, result) => {
+
+//                 if(err){
+//                     throw err;
+//                 }
+
+//                 else{
+//                     console.log(result)
+//                     return result
+//                 }
+
+//                 connection.release(err => {
+//                     if(err) console.log(err);
+//                 });
+//             });
+//         }
+//     });
+// }
+
+
 module.exports = {
     vehicle_report, vehicle_report_create
 };

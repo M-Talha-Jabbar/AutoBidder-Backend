@@ -1,6 +1,7 @@
 
 const auctionModel = require('../models/auctionModel.js');
-async function getList(req, res, next) {
+
+async function getList(req, res, next) {    //
     const auction = new auctionModel();
     try {
         const result = await auction.getall();
