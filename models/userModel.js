@@ -57,6 +57,7 @@ class User {
                 console.log("not connected :", err)
             }
             const res = await ExeQuery(query);
+            console.log(res.length)
             if (res.length > 0)
                 return true
             else
@@ -121,5 +122,26 @@ class User {
         }
 
     }  //end Insert
+    async checkPassword(email,password){
+        const query=`SELECT * FROM users WHERE email='${email}' and password='${password}'`;
+        console.log(query);
+        var dbCon, ExeQuery;
+        try {
+            try {
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch (err) {
+                console.log("not connected :", err)
+            }
+            const res = await ExeQuery(query);
+            return res[0];
+        } catch (err) {
+            return err;
+        } finally {
+            dbCon.release();
+        }
+    }
 }
 module.exports = User;

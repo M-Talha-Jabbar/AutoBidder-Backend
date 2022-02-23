@@ -13,7 +13,9 @@ class Auction {
 
     }
     async getall() {
-        const query = "Select * from `auctions` Where 1";
+        // const query = "Select *  `auctions` Where 1";
+        const query = `SELECT v.Image,v.name,v.modelNo as model,v.no_of_seats,a.status,v.RegNo FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1;`;
+        
         console.log(query);
         var dbCon, ExeQuery;
         try {
