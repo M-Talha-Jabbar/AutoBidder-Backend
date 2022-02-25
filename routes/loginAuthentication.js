@@ -1,7 +1,8 @@
 const router=require('express').Router();
 const JWT=require('jsonwebtoken');
 const res = require('express/lib/response');
-const UserModel = require('../models/userModel.js')
+const UserModel = require('../models/userModel.js');
+const e = require('express');
 router.post('/seller',async(req,res,next)=>{
  if(req.body.email&&req.body.password){
      const email=req.body.email;
@@ -10,12 +11,17 @@ router.post('/seller',async(req,res,next)=>{
     if(await user.isEmailExists(email))
     { 
         try{
-        const checkPw=await user.checkPassword(email,password)
-        if(checkPw){
+        const User=await user.checkPassword(email,password)
+        if(User){
             const token=JWT.sign({email:email,password:password},process.env.JWT_KEY,{expiresIn:"10s"})
             res.cookie("jwt",token,{httpOnly:true,path:'/'})
             res.header("withCredentials", true);
-            res.status(200).json({status:"authenticated"})
+            res.status(200).json({
+                cnic:User.CNIC,
+                name:User.full_name,
+                status:true,
+                token:token
+            })
         }
         else
         res.status(200).json({status:false,err:"password"})

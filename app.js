@@ -10,6 +10,7 @@ const userRouter=require('./routes/userRoutes');
 const auctionRoomRouter=require('./routes/auctionRoomRoute');
 const featureAdsRouter=require('./routes/FeatureAdsRoutes');
 const LoginRouter=require('./routes/loginAuthentication');
+const LogoutRouter=require('./routes/logoutRoute')
 var complaintRouter = require('./routes/complaint');
 var mechanicRouter = require('./routes/mechanic');
 var vehicleRouter = require('./routes/vehicle');
@@ -39,4 +40,5 @@ app.use('/api/vehicle', vehicleRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/bidder', bidderRouter);
 app.use('/api/login',LoginRouter);
+app.use('/api/logout',LogoutRouter);
 module.exports = app;

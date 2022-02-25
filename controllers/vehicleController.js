@@ -1,5 +1,17 @@
 const db_connection = require("../config/db_connect");
+const multer=require("multer");
+const e = require("express");
+const { NULL } = require("mysql/lib/protocol/constants/types");
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/images/cars');
+      },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
 
+const uploadImg = multer({storage: storage}).single('Image');
 const getReport = (RegNo) => new Promise((resolve, reject) => {
 
     db_connection.getConnection((err, connection) => {
@@ -73,35 +85,46 @@ const vehicle_report_create = (req, res) => {
 };
 
 
-// function getVehicle(regno){
-//     db_connection.getConnection((err, connection) => {
+function registerCar(req,res,next){
+    console.log(req.file.path.split("/"));
+    if(!req.file)
+    throw("no image send")
+    let rawpath=req.file.path.split("/")
+    rawpath=rawpath.filter((item,i)=>i!=0)
+    let imagePath=''
+    rawpath.forEach(element => {
+        imagePath+='/'+element
+    });
+    
+    db_connection.getConnection((err, connection) => {
+        const car=req.body;
+        const query="INSERT INTO `vehicles`(`RegNo`, `name`, `manufacturer`, `modelNo`, `no_of_seats`, `body_type`, `km_driven`, `engine_type`, `fuel_type`, `description`, `ownerCNIC`, `Image`)" +`VALUES ('${car.RegNo}','${car.name}','${car.manufacturer}',${car.modelNo},${car.no_of_seats},'${car.body_type}',${car.km_driven},'${car.engine_type}','${car.fuel_type}','${car.description}','${car.ownerCNIC}','${imagePath}')`
+        if(err) console.log(err);
 
-//         if(err) console.log(err);
+        else{
+            console.log('Connection got: ', connection.threadId);
 
-//         else{
-//             console.log('Connection got: ', connection.threadId);
+            connection.query(
+                query, (err, result) => {
 
-//             connection.query(
-//                 `SELECT * FROM vehicles where RegNo=${regno};`, (err, result) => {
+                if(err){
+                    throw err;
+                }
 
-//                 if(err){
-//                     throw err;
-//                 }
+                else{
+                    console.log(result)
+                     res.status(200).json("saved")
+                }
 
-//                 else{
-//                     console.log(result)
-//                     return result
-//                 }
-
-//                 connection.release(err => {
-//                     if(err) console.log(err);
-//                 });
-//             });
-//         }
-//     });
-// }
+                connection.release(err => {
+                    if(err) console.log(err);
+                });
+            });
+        }
+    });
+}
 
 
 module.exports = {
-    vehicle_report, vehicle_report_create
+    vehicle_report, vehicle_report_create,registerCar,uploadImg
 };
