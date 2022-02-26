@@ -125,6 +125,27 @@ function registerCar(req,res,next){
 }
 
 
+function getRegisteredCars(req,res,next){
+    db_connection.getConnection((err, connection) => {
+        const query=`Select * from vehicles where ownerCNIC='${req.body.CNIC}'`
+        if(err) console.log(err);
+        else{
+            console.log('Connection got: ', connection.threadId);
+            connection.query(
+                query, (err, result) => {
+                if(err){
+                    throw err;
+                }
+                else{
+                    res.status(200).json(result);
+                }
+                connection.release(err => {
+                    if(err) console.log(err);
+                });
+            });
+        }
+    });
+}
 module.exports = {
-    vehicle_report, vehicle_report_create,registerCar,uploadImg
+    vehicle_report, vehicle_report_create,registerCar,uploadImg,getRegisteredCars
 };
