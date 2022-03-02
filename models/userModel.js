@@ -143,5 +143,34 @@ class User {
             dbCon.release();
         }
     }
+    async getSellerId(email)
+    {
+        const query = `SELECT id from sellers WHERE UserCNIC=(SELECT CNIC FROM users WHERE email='${email}');`;
+        console.log(query);
+        var dbCon, ExeQuery;
+        try {
+
+            try {
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch (err) {
+                console.log("not connected :", err)
+            }
+            const res = await ExeQuery(query);
+            console.log(res.length)
+            if (res.length > 0)
+                return res[0].id;
+            else
+                return false;
+
+        } catch (err) {
+            throw err;
+        }
+        finally {
+            dbCon.release();
+        }
+    }
 }
 module.exports = User;

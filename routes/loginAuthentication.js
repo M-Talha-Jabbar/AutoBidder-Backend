@@ -11,12 +11,17 @@ router.post('/seller',async(req,res,next)=>{
     if(await user.isEmailExists(email))
     { 
         try{
-        const User=await user.checkPassword(email,password)
+        const User=await user.checkPassword(email,password);
+        const sellerID=await user.getSellerId(email);
+        if(sellerID){
+            console.log(sellerID);
+        }
         if(User){
             const token=JWT.sign({email:email,password:password},process.env.JWT_KEY,{expiresIn:"10s"})
             res.cookie("jwt",token,{httpOnly:true,path:'/'})
             res.header("withCredentials", true);
             res.status(200).json({
+                sellerID,
                 cnic:User.CNIC,
                 name:User.full_name,
                 status:true,
