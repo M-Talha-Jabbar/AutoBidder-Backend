@@ -1,6 +1,7 @@
 const router=require('express').Router();
 const controllers=require('../controllers/auctionController.js');
 router.get('/auctions_list',controllers.getList);
+router.get('/sellerslisting',controllers.getSellersListing);
 router.get('/filter',controllers.filter);
 router.post('/register_for_auction',controllers.register_for_auction);
 router.delete('/auction',controllers.Delete_auction);

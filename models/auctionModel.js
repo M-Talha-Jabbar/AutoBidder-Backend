@@ -5,16 +5,48 @@ class Auction {
             this.start_date_time = auction.start_date_time
             this.end_date_time = auction.end_date_time
             this.sellerID = auction.sellerID
+            this.startingPrice=auction.startingPrice;
             this.closing_bid = auction.closing_bid || null      //optional Buy now
             this.status = auction.status
             this.auc_winner = auction.auc_winner || null    //Will be set later      
             this.auc_vehicle = auction.auc_vehicle
+            this.buyNow=auction.buyNow;
         }
 
     }
     async getall() {
         // const query = "Select *  `auctions` Where 1";
         const query = `SELECT v.Image,v.manufacturer,v.name,v.modelNo as model,v.no_of_seats,a.status,v.RegNo FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1;`;
+        
+        console.log(query);
+        var dbCon, ExeQuery;
+        try {
+
+            try {
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch (err) {
+                console.log("not connected :", err)
+            }
+            const res = await ExeQuery(query);
+            console.log(res.length)
+            if (res.length > 0)
+                return res;
+            else
+                return "No auctions found";
+
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            dbCon.release();
+        }
+
+    }
+    async sellerAuctions(id){
+        const query = `SELECT v.Image,v.manufacturer,v.name,v.modelNo as model,v.no_of_seats,a.status,v.RegNo FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE a.sellerID=${id};`;
         
         console.log(query);
         var dbCon, ExeQuery;
@@ -82,7 +114,7 @@ class Auction {
         if (!await this.validateAucTime(this.start_date_time, this.end_date_time))  //Invalid date
             throw Error("The selected vehicle already registered for auction in that dataeTime");
 
-        const query = "INSERT INTO `auctions`( `start_date_time`, `end_date_time`, `sellerID`,`closing_bid`,`status`,`auc_winner` ,`auc_vehicle`)" + `VALUES ('${this.start_date_time}','${this.end_date_time}',${this.sellerID},${this.closing_bid},'${this.status}',${this.auc_winner},'${this.auc_vehicle}')`;
+        const query = "INSERT INTO `auctions`( `start_date_time`, `end_date_time`, `sellerID`,`startingPrice`,`closing_bid`,`status`,`auc_winner` ,`auc_vehicle`,`buyNow`)" + `VALUES ('${this.start_date_time}','${this.end_date_time}',${this.sellerID},${this.startingPrice},${this.closing_bid},'${this.status}',${this.auc_winner},'${this.auc_vehicle}',${this.buyNow})`;
         console.log(query)
         var dbCon, ExeQuery;
         try {
@@ -128,7 +160,7 @@ class Auction {
 
     }
     async validateVehicle(owner, vehicle) {
-        const query = `Select * from vehicles where RegNo='${vehicle}' and ownerCNIC=${owner}`
+        const query = `Select * from vehicles where RegNo='${vehicle}' and ownerCNIC=(select UserCNIC from sellers where id=${owner})`
         console.log(query)
         var dbCon, ExeQuery;
         try {

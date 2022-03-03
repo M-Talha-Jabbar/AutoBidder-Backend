@@ -11,6 +11,19 @@ async function getList(req, res, next) {    //
         res.status(500).json(err);
     }
 }
+async function getSellersListing(req, res, next) {    //
+    const auction = new auctionModel();
+    if(!req.query.sellerID){
+        res.status(401).send("Invalid Request")
+    }
+    try {
+        const result = await auction.sellerAuctions(req.query.sellerID);
+        res.status(200).json(result);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+}
 async function filter(req, res, next) {
     const auction = new auctionModel();
     if (!Object.keys(req.query)[0])
@@ -69,6 +82,7 @@ async function registered_for_bidding(req,res,next){
 
 }
 module.exports = {
+    getSellersListing,
     getList,
     filter,
     register_for_auction,
