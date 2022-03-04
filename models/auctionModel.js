@@ -14,9 +14,12 @@ class Auction {
         }
 
     }
-    async getall() {
-        // const query = "Select *  `auctions` Where 1";
-        const query = `SELECT v.Image,v.manufacturer,v.name,v.modelNo as model,v.no_of_seats,a.status,v.RegNo FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1;`;
+    async getall(search) {
+        let query=null;
+        if(search)
+        query = `SELECT v.Image,v.manufacturer,v.name,v.modelNo as model,v.no_of_seats,a.status,v.RegNo FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE v.name LIKE "%${search}%" OR v.description LIKE "%${search}%" ORDER BY a.start_date_time DESC;`;
+        else
+        query = `SELECT v.Image,v.manufacturer,v.name,v.modelNo as model,v.no_of_seats,a.status,v.RegNo FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1 ORDER BY a.start_date_time DESC;`;
         
         console.log(query);
         var dbCon, ExeQuery;

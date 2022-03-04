@@ -4,7 +4,11 @@ const auctionModel = require('../models/auctionModel.js');
 async function getList(req, res, next) {    //
     const auction = new auctionModel();
     try {
-        const result = await auction.getall();
+        let result
+        if(req.query.search)
+        result=await auction.getall(req.query.search)
+        else
+        result = await auction.getall();
         res.status(200).json(result);
     }
     catch (err) {
