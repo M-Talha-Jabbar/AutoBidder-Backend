@@ -39,6 +39,7 @@ app.use('/api/mechanic', mechanicRouter);
 app.use('/api/vehicle', vehicleRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/bidder', bidderRouter);
+
 app.use('/api/login',LoginRouter);
 app.use('/api/logout',LogoutRouter);
 module.exports = app;
