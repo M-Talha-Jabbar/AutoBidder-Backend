@@ -50,45 +50,48 @@ router.post('/buyer', async (req, res) => {
 
 
 router.post('/seller',async(req,res,next)=>{
- if(req.body.email&&req.body.password){
-     const email=req.body.email;
-     const password=req.body.password;
-    const user=new UserModel();
-    if(await user.isEmailExists(email))
-    { 
-        try{
-        const User=await user.checkPassword(email,password);
-        const sellerID=await user.getSellerId(email);
-        // if(sellerID){
-        //     console.log(sellerID);
-        // }
-        if(User){
-            const token=JWT.sign({email:email,password:password},process.env.JWT_KEY,{expiresIn:"10s"})
-            res.cookie("jwt",token,{httpOnly:true,path:'/'})
-            res.header("withCredentials", true);
-            res.status(200).json({
-                sellerID,
-                cnic:User.CNIC,
-                name:User.full_name,
-                status:true,
-                token:token
-            })
-        }
-        else
-        res.status(401).json({status:false,err:"password"})
-    }
-        catch(e){
-            res.status(500).end(e.message);
-        }
-    }
-    else
-    res.status(401).json({status:false,err:"email"});
-    }
-    else{
-        //console.log(req.body)
-        res.status(400).end("Invalid Request");
-    }
-});
+    if(req.body.email&&req.body.password){
+        const email=req.body.email;
+        const password=req.body.password;
+       const user=new UserModel();
+       if(await user.isEmailExists(email))
+       { 
+           try{
+           const User=await user.checkPassword(email,password);
+           const sellerID=await user.getSellerId(email);
+           if(sellerID){
+               console.log(sellerID);
+           }
+           else{
+               res.status(400).json({status:false,message:"You are not registered as Seller"})
+           }
+           if(User){
+               const token=JWT.sign({email:email,password:password},process.env.JWT_KEY,{expiresIn:"10s"})
+               res.cookie("jwt",token,{httpOnly:true,path:'/'})
+               res.header("withCredentials", true);
+               res.status(200).json({
+                   sellerID,
+                   cnic:User.CNIC,
+                   name:User.full_name,
+                   status:true,
+                   token:token
+               })
+           }
+           else
+           res.status(200).json({status:false,err:"password"})
+       }
+           catch(e){
+               res.status(500).end(e.message);
+           }
+       }
+       else
+       res.status(200).json({status:false,err:"email"})
+       }
+       else{
+           console.log(req.body)
+           res.status(400).end("Invalid Request")
+       }
+   })
 
 
 router.get('/seller/check',(req,res)=>{    //for debug
