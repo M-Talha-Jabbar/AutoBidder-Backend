@@ -18,7 +18,7 @@ router.post('/buyer', async (req, res) => {
                 const User = await user.checkPassword(email, password);
 
                 if(User){
-                    const token = JWT.sign({ email:email,password:password }, process.env.JWT_KEY, { expiresIn:"10s" })
+                    const token = JWT.sign({CNIC: User.CNIC, email:email,password:password }, process.env.JWT_KEY, { expiresIn:"10d" })
                     res.cookie("jwt", token, { httpOnly:true, path:'/' });
                     res.header("withCredentials", true);
                     res.status(200).json({
@@ -66,7 +66,7 @@ router.post('/seller',async(req,res,next)=>{
                res.status(400).json({status:false,message:"You are not registered as Seller"})
            }
            if(User){
-               const token=JWT.sign({email:email,password:password},process.env.JWT_KEY,{expiresIn:"10s"})
+               const token=JWT.sign({CNIC:User.CNIC,email:email,password:password},process.env.JWT_KEY,{expiresIn:"5d"})
                res.cookie("jwt",token,{httpOnly:true,path:'/'})
                res.header("withCredentials", true);
                res.status(200).json({

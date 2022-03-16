@@ -10,7 +10,8 @@ const userRouter=require('./routes/userRoutes');
 const auctionRoomRouter=require('./routes/auctionRoomRoute');
 const featureAdsRouter=require('./routes/FeatureAdsRoutes');
 const LoginRouter=require('./routes/loginAuthentication');
-const LogoutRouter=require('./routes/logoutRoute')
+const LogoutRouter=require('./routes/logoutRoute');
+const SubscriptionRouter=require('./routes/subscriptionRoute');
 var complaintRouter = require('./routes/complaint');
 var mechanicRouter = require('./routes/mechanic');
 var vehicleRouter = require('./routes/vehicle');
@@ -33,6 +34,7 @@ app.use('/api/user',userRouter);
 app.use('/api/auction',auctionRouter);
 app.use('/api/auctionRoom',auctionRoomRouter);
 app.use('/api/featureAds',featureAdsRouter);
+app.use('/api/subscription',SubscriptionRouter);
 
 app.use('/api/complaint', complaintRouter);
 app.use('/api/mechanic', mechanicRouter);

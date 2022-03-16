@@ -208,7 +208,7 @@ class Auction {
             const res = await ExeQuery(query);
             console.log(res.length)
             if (res.length > 0)
-                return true;
+                return res;
             else
                 return false;
 

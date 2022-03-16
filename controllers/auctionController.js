@@ -77,7 +77,7 @@ async function registered_for_bidding(req,res,next){
     try{
         const result=await auction.IsRegisteredForBidding(req.body.AuctionId,req.body.UserCNIC);
         if(result)
-        res.json(true);
+        res.json(result[0]);
         else
         res.json(false)
     }catch(err){
