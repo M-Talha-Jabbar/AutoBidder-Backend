@@ -63,7 +63,7 @@ router.post('/seller',async(req,res,next)=>{
                console.log(sellerID);
            }
            else{
-               res.status(400).json({status:false,message:"You are not registered as Seller"})
+               return res.status(400).json({status:false,message:"You are not registered as Seller"})
            }
            if(User){
                const token=JWT.sign({CNIC:User.CNIC,email:email,password:password},process.env.JWT_KEY,{expiresIn:"5d"})

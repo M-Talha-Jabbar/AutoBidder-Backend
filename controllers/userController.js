@@ -5,12 +5,12 @@ async function signup(req, res, next) {
         return res.status(400).json("Invalid Request");
     const user = new UserModel(userReq);
     if (await user.isCnicExists(user.CNIC))
-        return res.status(400).json("The CNIC you entered is already registered ");
+        return res.status(400).json({err:"CNIC",message:"The CNIC you entered is already registered "});
     if (await user.isEmailExists(user.email))
-        return res.status(400).json("The email you entered is already registered ");
+        return res.status(400).json({err:"email",message:"The email you entered is already registered "});
     try {
         const result = await user.insert();
-        return res.json("Successfully registered");
+        return res.json({status:true,message:"Successfully registered"});
     } catch (e) {
         return res.send(e);
     }
