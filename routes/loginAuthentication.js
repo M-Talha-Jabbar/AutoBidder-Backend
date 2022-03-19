@@ -16,6 +16,13 @@ router.post('/buyer', async (req, res) => {
         if(await user.isEmailExists(email)){
             try{
                 const User = await user.checkPassword(email, password);
+               
+                if(User.isBuyer){
+                    
+                }
+                else{
+                    return res.status(400).json({status:false,message:"You are not registered as Buyer"});
+                }
 
                 if(User){
                     const token = JWT.sign({CNIC: User.CNIC, email:email,password:password }, process.env.JWT_KEY, { expiresIn:"10d" })

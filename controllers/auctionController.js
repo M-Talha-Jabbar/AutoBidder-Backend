@@ -15,7 +15,7 @@ async function getList(req, res, next) {
         res.status(500).json(err);
     }
 }
-async function getSellersListing(req, res, next) {    //
+async function getSellersListing(req, res, next) {    
     const auction = new auctionModel();
     if(!req.query.sellerID){
         res.status(401).send("Invalid Request")

@@ -102,7 +102,9 @@ class User {
     
     async insert() {
         const query = "INSERT INTO `users`(`CNIC`, `full_name`,`email`,`password`, `contact_no`,`location`, `isSeller`,`isBuyer`)" + `VALUES ('${this.CNIC}','${this.full_name}','${this.email}','${this.password}','${this.contact_no}','${this.location}',${this.isSeller},${this.isBuyer})`;
-        console.log(query)
+        const query2 = `INSERT INTO sellers (UserCNIC) VALUES ('${this.CNIC}')`;
+        
+        console.log(query, query2);
         var dbCon, ExeQuery;
         try {
             try {
@@ -114,6 +116,9 @@ class User {
                 console.log("not connected :", err)
             }
             const res = await ExeQuery(query);
+            if(this.isSeller === 1){
+                const res2 = await ExeQuery(query2);
+            }
 
         } catch (err) {
             return err;
@@ -121,7 +126,8 @@ class User {
             dbCon.release();
         }
 
-    }  //end Insert
+    }  
+
     async checkPassword(email,password){
         const query=`SELECT * FROM users WHERE email='${email}' and password='${password}'`;
         console.log(query);
