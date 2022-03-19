@@ -17,9 +17,9 @@ class Auction {
     async getall(search) {
         let query=null;
         if(search)
-        query = `SELECT v.*, a.id, a.status FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE v.name LIKE "%${search}%" OR v.description LIKE "%${search}%" ORDER BY a.start_date_time DESC;`;
+        query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE v.name LIKE "%${search}%" OR v.description LIKE "%${search}%" ORDER BY a.start_date_time DESC;`;
         else
-        query = `SELECT v.*, a.id, a.status FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1 ORDER BY a.start_date_time DESC;`;
+        query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1 ORDER BY a.start_date_time DESC;`;
         
         console.log(query);
         var dbCon, ExeQuery;
@@ -49,7 +49,7 @@ class Auction {
 
     }
     async sellerAuctions(id){
-        const query = `SELECT v.*, a.id, a.status FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE a.sellerID=${id};`;
+        const query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE a.sellerID=${id};`;
         
         console.log(query);
         var dbCon, ExeQuery;
@@ -115,7 +115,7 @@ class Auction {
         if (!await this.validateVehicle(this.sellerID, this.auc_vehicle))  //Invalid Car
             throw Error("The selected vehicle is not registered against your cnic");
         if (!await this.validateAucTime(this.start_date_time, this.end_date_time))  //Invalid date
-            throw Error("The selected vehicle already registered for auction in that dataeTime");
+            throw Error("The selected vehicle already registered for auction in that dateTime");
 
         const query = "INSERT INTO `auctions`( `start_date_time`, `end_date_time`, `sellerID`,`startingPrice`,`closing_bid`,`status`,`auc_winner` ,`auc_vehicle`,`buyNow`)" + `VALUES ('${this.start_date_time}','${this.end_date_time}',${this.sellerID},${this.startingPrice},${this.closing_bid},'${this.status}',${this.auc_winner},'${this.auc_vehicle}',${this.buyNow})`;
         console.log(query)
@@ -219,6 +219,45 @@ class Auction {
             dbCon.release();
         }
     }
+
+    async registerForBidding(UserCNIC,AuctionID,RegID){
+        const query=`UPDATE membership_registrations SET RemainingAuction=(SELECT RemainingAuction FROM membership_registrations WHERE RegID=${RegID})-1 WHERE RegID=${RegID};`
+        const query2=`INSERT INTO bidders(UserCNIC, AuctionID) VALUES ('${UserCNIC}',${AuctionID})`;
+        const query3=`SELECT ID as BiddingID FROM bidders WHERE UserCNIC='${UserCNIC}' and AuctionID=${AuctionID}`
+        console.log(query3);
+        var dbCon, ExeQuery;
+        try {
+
+            try {
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch (err) {
+                console.log("not connected :", err)
+            }
+            let res = await ExeQuery(query);
+            console.log(res.affectedRows)  //Subscription  updated
+            if (res.affectedRows > 0)
+                {
+                    res=await ExeQuery(query2);
+                    if(res.affectedRows>0){
+                        res=await ExeQuery(query3); //get bidding id
+                        return res[0];
+                    }
+                }
+            else
+                return false;
+
+        }
+         catch (err) {
+            console.log(err);
+        }
+        finally {
+            dbCon.release();
+        }
+    }
+
     async validateAucTime(start, end) {
         const query = `Select * from auctions where auc_vehicle='${this.auc_vehicle}' AND (start_date_time BETWEEN'${start}' and '${end}' OR end_date_time BETWEEN'${start}' and '${end}')`
         console.log(query)

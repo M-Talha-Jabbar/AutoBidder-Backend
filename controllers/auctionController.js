@@ -1,4 +1,4 @@
-
+const JWT=require('jsonwebtoken');
 const auctionModel = require('../models/auctionModel.js');
 
 async function getList(req, res, next) {    
@@ -85,11 +85,34 @@ async function registered_for_bidding(req,res,next){
     }
 
 }
+
+async function register_for_bidding(req, res, next){
+    if(!req.body.RegID||!req.body.AuctionID){
+        return  res.status(400).send("Invalid Request");
+      }
+      try{
+          const auction = new auctionModel();
+          const user=JWT.verify(req.cookies.jwt,process.env.JWT_KEY);
+          if(user.CNIC)
+          {
+             const biddingId = await auction.registerForBidding(user.CNIC,req.body.AuctionID,req.body.RegID);
+             res.status(200).json(biddingId);
+          }else{
+              res.status(403).send(e.message);
+          }
+      
+      }catch(e){
+          console.log(e.message);
+          res.status(403).send(e.message);
+      }
+}
+
 module.exports = {
     getSellersListing,
     getList,
     filter,
     register_for_auction,
     Delete_auction,
-    registered_for_bidding
+    registered_for_bidding,
+    register_for_bidding
 }
