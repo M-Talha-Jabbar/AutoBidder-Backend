@@ -7,7 +7,6 @@ var logger = require('morgan');
 const cors=require('cors');
 const auctionRouter=require('./routes/auctionRoutes');
 const userRouter=require('./routes/userRoutes');
-const auctionRoomRouter=require('./routes/auctionRoomRoute');
 const featureAdsRouter=require('./routes/FeatureAdsRoutes');
 const LoginRouter=require('./routes/loginAuthentication');
 const LogoutRouter=require('./routes/logoutRoute');
@@ -23,7 +22,8 @@ var app = express();
 app.use(cors({
     origin:"http://localhost:3000",
     credentials:true 
-}))
+}));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -32,7 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/user',userRouter);
 app.use('/api/auction',auctionRouter);
-app.use('/api/auctionRoom',auctionRoomRouter);
 app.use('/api/featureAds',featureAdsRouter);
 app.use('/api/subscription',SubscriptionRouter);
 
@@ -44,4 +43,5 @@ app.use('/api/bidder', bidderRouter);
 
 app.use('/api/login',LoginRouter);
 app.use('/api/logout',LogoutRouter);
+
 module.exports = app;
