@@ -9,7 +9,7 @@ var debug = require('debug')('car-tijarat:server');
 var http = require('http');
 var { Server } = require('socket.io');
 
-const auctionRoomNamespace = require('../namespaces/auctionRoom');
+const auctionRoomHandler = require('../namespaces/auctionRoom');
 
 /**
  * Get port from environment and store in Express.
@@ -25,7 +25,7 @@ app.set('port', port);
 var httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000"
+    origin: process.env.interfaceURL
   }
 });
 
@@ -41,11 +41,11 @@ httpServer.on('listening', onListening);
  * 
  */
 
-const onConnection = (socket) => {
-    auctionRoomNamespace(io, socket);
-};
+const auctionRoomNamespace = io.of('/namespace/auctionRoom');
 
-io.of('/namespace/auctionRoom').on('connection', onConnection);
+auctionRoomNamespace.on('connection', (socket) => {
+  auctionRoomHandler(auctionRoomNamespace, socket);
+});
 
 /**
  * Normalize a port into a number, string, or false.

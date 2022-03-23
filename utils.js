@@ -12,4 +12,52 @@ function getDate(days){
     return date1;
 //2021-12-27 12:23:48
 }
-module.exports={getDate};
+
+
+const roomsState = []; // every auction with its highest bidder and his bid
+
+function auctionRoomState(RoomID){
+    let room = roomsState.find(room => room.RoomID === RoomID);
+    
+    if(room){
+        
+    }
+    else{
+        room = { RoomID , highestBid: 0, bidderID: '---' };
+        roomsState.push(room);
+    }
+
+    return room;
+}
+
+function setHighestBid(RoomID, bid, bidderID){
+    const roomIndex = roomsState.findIndex(room => room.RoomID === RoomID);
+    roomsState[roomIndex].highestBid = bid;
+    roomsState[roomIndex].bidderID = bidderID;
+}
+
+
+const bidders = []; // last bid of every bidder in a particular auction
+
+function biddersBid(RoomID, bidderID){
+    let bidder = bidders.find(bidder => bidder.bidderID === bidderID && bidder.RoomID === RoomID);
+
+    if(bidder){
+
+    }
+    else{
+        bidder = { RoomID, bidderID, lastBid: 'No Bid placed' };
+        bidders.push(bidder);
+    }
+
+    return bidder;
+}
+
+function setLastBid(RoomID, bidderID, lastBid){
+    const bidderIndex = bidders.findIndex(bidder => bidder.bidderID === bidderID && bidder.RoomID === RoomID);
+    bidders[bidderIndex].lastBid = lastBid;
+}
+
+module.exports={ 
+    getDate, auctionRoomState, setHighestBid, biddersBid, setLastBid
+};

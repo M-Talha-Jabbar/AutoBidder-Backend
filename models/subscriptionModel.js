@@ -8,7 +8,7 @@ class Subscription{
     }
 
     async getSubscriptions(UserCNIC){
-        const query=`SELECT mt.type,mr.* FROM membership_registrations as mr join membership_types as mt WHERE mr.TypeID=mt.Id AND UserCNIC='${UserCNIC}';`
+        const query=`SELECT mt.type, mr.* FROM membership_registrations as mr join membership_types as mt WHERE mr.TypeID=mt.Id AND mr.UserCNIC='${UserCNIC}';`
         var dbCon, ExeQuery;
         try {
 

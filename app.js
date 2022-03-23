@@ -20,8 +20,8 @@ var bidderRouter = require('./routes/bidder');
 var app = express();
 
 app.use(cors({
-    origin:"http://localhost:3000",
-    credentials:true 
+    origin: process.env.interfaceURL,
+    credentials: true 
 }));
 
 app.use(logger('dev'));
