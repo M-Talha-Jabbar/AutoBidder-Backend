@@ -14,7 +14,7 @@ function getDate(days){
 }
 
 
-const roomsState = []; // every auction with its highest bidder and his bid
+let roomsState = []; // highest bidder with his bid & total number of bids placed in a particular auction
 
 function auctionRoomState(RoomID){
     let room = roomsState.find(room => room.RoomID === RoomID);
@@ -23,21 +23,28 @@ function auctionRoomState(RoomID){
         
     }
     else{
-        room = { RoomID , highestBid: 0, bidderID: '---' };
+        room = { RoomID , highestBid: 0, bidderID: '---', bidCount: 0 };
         roomsState.push(room);
     }
 
     return room;
 }
 
+function getAuctionRoomState(RoomID){
+    let room = roomsState.find(room => room.RoomID === RoomID);
+
+    return room || null;
+}
+
 function setHighestBid(RoomID, bid, bidderID){
     const roomIndex = roomsState.findIndex(room => room.RoomID === RoomID);
     roomsState[roomIndex].highestBid = bid;
     roomsState[roomIndex].bidderID = bidderID;
+    roomsState[roomIndex].bidCount += 1;
 }
 
 
-const bidders = []; // last bid of every bidder in a particular auction
+let bidders = []; // last bid & total number of bids placed by a bidder in a particular auction
 
 function biddersBid(RoomID, bidderID){
     let bidder = bidders.find(bidder => bidder.bidderID === bidderID && bidder.RoomID === RoomID);
@@ -46,7 +53,7 @@ function biddersBid(RoomID, bidderID){
 
     }
     else{
-        bidder = { RoomID, bidderID, lastBid: 'No Bid placed' };
+        bidder = { RoomID, bidderID, lastBid: 'No Bid placed', bidCount: 0 };
         bidders.push(bidder);
     }
 
@@ -56,8 +63,21 @@ function biddersBid(RoomID, bidderID){
 function setLastBid(RoomID, bidderID, lastBid){
     const bidderIndex = bidders.findIndex(bidder => bidder.bidderID === bidderID && bidder.RoomID === RoomID);
     bidders[bidderIndex].lastBid = lastBid;
+    bidders[bidderIndex].bidCount += 1;
+}
+
+function clearEndedAuction(RoomID, bidderID){
+    console.log(roomsState);
+    let newRoomState = roomsState.filter(room => room.RoomID !== RoomID);
+    roomsState = newRoomState;
+    console.log(roomsState);
+
+    console.log(bidders);
+    let newBiddersArray = bidders.filter(bidder => bidder.bidderID !== bidderID);
+    bidders = newBiddersArray;
+    console.log(bidders);
 }
 
 module.exports={ 
-    getDate, auctionRoomState, setHighestBid, biddersBid, setLastBid
+    getDate, auctionRoomState, getAuctionRoomState, setHighestBid, biddersBid, setLastBid, clearEndedAuction
 };

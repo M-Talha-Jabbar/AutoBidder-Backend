@@ -1,6 +1,5 @@
 const db_connection = require("../config/db_connect");
 
-
 const getMembershipTypes = () => new Promise((resolve, reject) => {
     
     db_connection.getConnection((err, connection) => {
