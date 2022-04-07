@@ -1,5 +1,5 @@
 const { closeAuctionRoom, closeAuctionBids } = require("../controllers/auctionRoomController");
-const { auctionRoomState, getAuctionRoomState, setHighestBid, biddersBid, setLastBid, clearEndedAuction } = require("../utils");
+const { auctionRoomState, getAuctionRoomState, setHighestBid, biddersBid, setLastBid, clearRoom, clearBidders } = require("../utils");
 
 module.exports = (auctionRoomNamespace, socket) => {
     //console.log(auctionRoomNamespace);
@@ -20,7 +20,7 @@ module.exports = (auctionRoomNamespace, socket) => {
     const bidPlaced = ({ RoomID, bid, bidderID }) => {
         //console.log(bid);
 
-        // if current bid is less than or equal to the highest bid than it will be handled on the frontend
+        // if current bid is less than or equal to the highest bid and starting bid than it will be handled on the frontend
 
         setHighestBid(RoomID ,bid, bidderID);
         const room = auctionRoomState(RoomID); // get current auction state
@@ -36,15 +36,15 @@ module.exports = (auctionRoomNamespace, socket) => {
         const room = getAuctionRoomState(RoomID);
 
         if(room){
-            closeAuctionRoom(RoomID, room.highestBid, room.bidderID, room.bidCount)
-                .then(result => console.log(result))
+            closeAuctionRoom(RoomID, room.highestBid, (room.bidderID === '---') ? null : room.bidderID, room.bidCount)
+                .then(result => { console.log(result); clearRoom(RoomID); })
                 .catch(err => console.log(err));
         }
 
         const bidder = biddersBid(RoomID, BiddingID);
 
-        closeAuctionBids(RoomID, bidder.bidderID, bidder.lastBid === 'No Bid placed' ? 0 : bidder.lastBid, bidder.bidCount)
-            .then(result => {console.log(result); clearEndedAuction(RoomID, BiddingID);})
+        closeAuctionBids(RoomID, bidder.bidderID, (bidder.lastBid === 'No Bid placed') ? 0 : bidder.lastBid, bidder.bidCount)
+            .then(result => { console.log(result); clearBidders(BiddingID); })
             .catch(err => console.log(err));
     };
 

@@ -17,9 +17,9 @@ class Auction {
     async getall(search) {
         let query=null;
         if(search)
-        query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE v.name LIKE "%${search}%" OR v.description LIKE "%${search}%" ORDER BY a.start_date_time DESC;`;
+        query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time, a.startingPrice FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE v.name LIKE "%${search}%" OR v.description LIKE "%${search}%" ORDER BY a.start_date_time DESC;`;
         else
-        query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1 ORDER BY a.start_date_time DESC;`;
+        query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time, a.startingPrice FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE 1 ORDER BY a.start_date_time DESC;`;
         
         console.log(query);
         var dbCon, ExeQuery;
@@ -49,7 +49,7 @@ class Auction {
 
     }
     async sellerAuctions(id){
-        const query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE a.sellerID=${id};`;
+        const query = `SELECT v.*, a.id, a.status, a.start_date_time, a.end_date_time, a.startingPrice FROM auctions as a JOIN vehicles as v ON(a.auc_vehicle=v.RegNo) WHERE a.sellerID=${id};`;
         
         console.log(query);
         var dbCon, ExeQuery;

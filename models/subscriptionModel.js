@@ -1,10 +1,10 @@
 const connectDB = require("../connect.js").connectToDB;
 class Subscription{
-    constructor(){
+    constructor(TypeID = null){
+        this.TypeID=TypeID;
         this.package=null;
-        this.RemainingAuction=null;
-        this.TransactionID=null;
-        this.TypeID=null;
+        this.RemainingAuction = TypeID && (this.TypeID === 1) ? 5 : 25;
+        this.TransactionID = TypeID && (this.TypeID === 1) ? 1 : 2;
     }
 
     async getSubscriptions(UserCNIC){
@@ -18,10 +18,10 @@ class Subscription{
                 ExeQuery = connection.ExeQuery;
             }
             catch (err) {
-                console.log("not connected :", err)
+                console.log("not connected :", err);
             }
             const res = await ExeQuery(query);
-            console.log(res.length)
+            console.log(res.length);
             if (res.length > 0)
                 return res;
             else
@@ -35,9 +35,63 @@ class Subscription{
         }
 
     }
+
+    async alreadyRegister(UserCNIC){
+        const query = `SELECT * FROM membership_registrations WHERE UserCNIC = '${UserCNIC}'`;
+
+        var dbCon, ExeQuery;
+        try{
+            try{
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch(err){
+                console.log("not connected :", err);
+            }
+
+            const res = await ExeQuery(query);
+            console.log(res.length);
+            if (res.length === 1)
+                return true;
+            else
+                return false;
+        }
+        catch(err){
+            console.log(err);
+        }
+        finally{
+            dbCon.release();
+        }
+    }
     
-    async subscribe(){
+    async subscribe(UserCNIC){
+        const query = `INSERT INTO membership_registrations (TypeID, UserCNIC, TransactionID, RemainingAuction) VALUES(${this.TypeID}, '${UserCNIC}', ${this.TransactionID}, ${this.RemainingAuction})`
         
+        var dbCon, ExeQuery;
+        try{
+            try{
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch(err){
+                console.log("not connected :", err);
+            }
+
+            const res = await ExeQuery(query);
+            console.log(res.length);
+            if (res.length > 0)
+                return res;
+            else
+                return false;
+        }
+        catch(err){
+            console.log(err);
+        }
+        finally{
+            dbCon.release();
+        }
     }
 }
 module.exports=Subscription;

@@ -66,12 +66,14 @@ function setLastBid(RoomID, bidderID, lastBid){
     bidders[bidderIndex].bidCount += 1;
 }
 
-function clearEndedAuction(RoomID, bidderID){
+function clearRoom(RoomID){
     console.log(roomsState);
     let newRoomState = roomsState.filter(room => room.RoomID !== RoomID);
     roomsState = newRoomState;
     console.log(roomsState);
+}
 
+function clearBidders(bidderID){
     console.log(bidders);
     let newBiddersArray = bidders.filter(bidder => bidder.bidderID !== bidderID);
     bidders = newBiddersArray;
@@ -79,5 +81,5 @@ function clearEndedAuction(RoomID, bidderID){
 }
 
 module.exports={ 
-    getDate, auctionRoomState, getAuctionRoomState, setHighestBid, biddersBid, setLastBid, clearEndedAuction
+    getDate, auctionRoomState, getAuctionRoomState, setHighestBid, biddersBid, setLastBid, clearRoom, clearBidders
 };
