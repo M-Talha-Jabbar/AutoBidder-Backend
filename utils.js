@@ -67,17 +67,20 @@ function setLastBid(RoomID, bidderID, lastBid){
 }
 
 function clearRoom(RoomID){
-    console.log(roomsState);
+    //console.log(roomsState);
     let newRoomState = roomsState.filter(room => room.RoomID !== RoomID);
     roomsState = newRoomState;
-    console.log(roomsState);
+    //console.log(roomsState);
 }
 
-function clearBidders(bidderID){
-    console.log(bidders);
-    let newBiddersArray = bidders.filter(bidder => bidder.bidderID !== bidderID);
+function clearBidders(RoomID){
+    //console.log(bidders);
+    let getBidders = bidders.filter(bidder => bidder.RoomID === RoomID);
+    let newBiddersArray = bidders.filter(bidder => bidder.RoomID !== RoomID);
     bidders = newBiddersArray;
-    console.log(bidders);
+    //console.log(bidders);
+
+    return getBidders;
 }
 
 module.exports={ 

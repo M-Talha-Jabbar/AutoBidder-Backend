@@ -39,13 +39,15 @@ module.exports = (auctionRoomNamespace, socket) => {
             closeAuctionRoom(RoomID, room.highestBid, (room.bidderID === '---') ? null : room.bidderID, room.bidCount)
                 .then(result => { console.log(result); clearRoom(RoomID); })
                 .catch(err => console.log(err));
+
+            const getBiddersOfARoom = clearBidders(RoomID);
+
+            getBiddersOfARoom.forEach(bidder => {
+                closeAuctionBids(RoomID, bidder.bidderID, (bidder.lastBid === 'No Bid placed') ? 0 : bidder.lastBid, bidder.bidCount)
+                    .then(result => console.log(result) )
+                    .catch(err => console.log(err));
+            });
         }
-
-        const bidder = biddersBid(RoomID, BiddingID);
-
-        closeAuctionBids(RoomID, bidder.bidderID, (bidder.lastBid === 'No Bid placed') ? 0 : bidder.lastBid, bidder.bidCount)
-            .then(result => { console.log(result); clearBidders(BiddingID); })
-            .catch(err => console.log(err));
     };
 
 
