@@ -18,7 +18,7 @@ var sellerRouter = require('./routes/seller');
 var bidderRouter = require('./routes/bidder');
 
 var app = express();
-
+console.log(process.env.interfaceURL);
 app.use(cors({
     origin: process.env.interfaceURL,
     credentials: true 

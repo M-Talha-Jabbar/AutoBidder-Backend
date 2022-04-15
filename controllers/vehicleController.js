@@ -1,12 +1,14 @@
 const db_connection = require("../config/db_connect");
 const multer=require("multer");
 const e = require("express");
-const { NULL } = require("mysql/lib/protocol/constants/types");
+const { NULL, TIMESTAMP } = require("mysql/lib/protocol/constants/types");
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/images/cars');
       },
     filename: function (req, file, cb) {
+        if(file.mimetype!="image/jpeg")
+        throw("Invalid image type")
         cb(null, file.originalname);
     }
 });
@@ -86,12 +88,12 @@ const vehicle_report_create = (req, res) => {
 
 
 function registerCar(req,res,next){
-    console.log(req.file.path.split("/"));
     if(!req.file)
     throw("no image send")
-    let rawpath=req.file.path.split("/")
+    let rawpath=req.file.path.split("\\")
     rawpath=rawpath.filter((item,i)=>i!=0)
     let imagePath=''
+    console.log(rawpath," here");
     rawpath.forEach(element => {
         imagePath+='/'+element
     });
