@@ -42,5 +42,5 @@ app.use('/api/bidder', bidderRouter);
 
 app.use('/api/login',LoginRouter);
 app.use('/api/logout',LogoutRouter);
-
+app.use('/static',express.static("public"))
 module.exports = app;
