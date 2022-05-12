@@ -18,7 +18,6 @@ async function createPDF(data) {
     .text('Car Tijarat\nCar Condition Report', 100, 100,{align:"center",underline:true,backgroundColor:"blue"});
     doc.fontSize(16).fillColor("black").text("Car Registeration # "+data.regNo,100,300,{align:"center",})
     doc.fontSize(16).text("Mechanic Name :"+data.mechanicName,{align:"center",})
-    doc.fontSize(16).text("Shop Name :"+data.mechanicShop,{align:"center",})
     doc.fontSize(16).text("Mechanic contact# "+data.mechanicPhone,{align:"center",})
   
   let attrCount=0;

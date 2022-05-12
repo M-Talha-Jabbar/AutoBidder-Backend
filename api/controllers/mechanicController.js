@@ -106,7 +106,12 @@ const certifiedByMechanic = (CNIC) => new Promise((resolve, reject) => {
 });
 
 const mechanic_certified_vehicles = (req, res) => {
-    console.log(req.body.CNIC)
+    if(req.cookies.jwt==undefined)
+    {
+       return res.status(403).end("You are not authorized")
+    }
+    const tokenData=JWT.verify(req.cookies.jwt,process.env.JWT_KEY);
+    certifiedByMechanic(tokenData.CNIC)
     certifiedByMechanic(req.body.CNIC)
         .then(result => res.json(result))
         .catch(err => res.json(err));
