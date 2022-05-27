@@ -100,7 +100,7 @@ function registerCar(req,res,next){
     
     db_connection.getConnection((err, connection) => {
         const car=req.body;
-        const query="INSERT INTO `vehicles`(`RegNo`, `name`, `manufacturer`, `modelNo`, `no_of_seats`, `body_type`, `km_driven`, `engine_type`, `fuel_type`, `description`, `ownerCNIC`, `Image`)" +`VALUES ('${car.RegNo}','${car.name}','${car.manufacturer}',${car.modelNo},${car.no_of_seats},'${car.body_type}',${car.km_driven},'${car.engine_type}','${car.fuel_type}','${car.description}','${car.ownerCNIC}','${imagePath}')`
+        const query="INSERT INTO `vehicles`(`RegNo`, `name`, `manufacturer`, `modelNo`, `no_of_seats`, `body_type`, `km_driven`, `engine_type`, `fuel_type`, `IsLicenseVerified`,`description`, `ownerCNIC`, `Image`)" +`VALUES ('${car.RegNo}','${car.name}','${car.manufacturer}',${car.modelNo},${car.no_of_seats},'${car.body_type}',${car.km_driven},'${car.engine_type}','${car.fuel_type}',${car.IsLicenseVerified},'${car.description}','${car.ownerCNIC}','${imagePath}')`
         if(err) console.log(err);
 
         else{
