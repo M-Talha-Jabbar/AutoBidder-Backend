@@ -34,7 +34,7 @@ app.use('/api/auction',auctionRouter);
 app.use('/api/featureAds',featureAdsRouter);
 app.use('/api/subscription',SubscriptionRouter);
 
-app.use('/api/complaint', complaintRouter);
+app.use('/api', complaintRouter);
 app.use('/api/mechanic', mechanicRouter);
 app.use('/api/vehicle', vehicleRouter);
 app.use('/api/seller', sellerRouter);
