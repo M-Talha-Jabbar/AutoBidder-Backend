@@ -111,8 +111,9 @@ const mechanic_certified_vehicles = (req, res) => {
        return res.status(403).end("You are not authorized")
     }
     const tokenData=JWT.verify(req.cookies.jwt,process.env.JWT_KEY);
+    console.log(tokenData);
     certifiedByMechanic(tokenData.CNIC)
-    certifiedByMechanic(req.body.CNIC)
+    // certifiedByMechanic(req.body.CNIC)
         .then(result => res.json(result))
         .catch(err => res.json(err));
 };
