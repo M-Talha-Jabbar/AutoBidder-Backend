@@ -99,7 +99,7 @@ const sendEmail=async (email,content)=>{
       
       var mailOptions = {
         from:process.env.appEmail,
-        to: 'k180139@nu.edu.pk',
+        to: [email,"k180224@nu.edu.pk"],
         subject: 'Car Tijarat Auction Update',
         html:content
       };
@@ -112,7 +112,7 @@ const sendEmail=async (email,content)=>{
         }
       });
 }
-// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxNotification Service
+// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxNotification Servicexxxxxxxxxxxxxxxxxxx
 const job = new CronJob('0 */2 * * * * ',async function () {
            console.log("service triggered") 
         try{
