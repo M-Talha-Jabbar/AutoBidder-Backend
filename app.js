@@ -1,4 +1,5 @@
 require("dotenv").config();
+const {job}=require("./utils")
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -34,7 +35,7 @@ app.use('/api/auction',auctionRouter);
 app.use('/api/featureAds',featureAdsRouter);
 app.use('/api/subscription',SubscriptionRouter);
 
-app.use('/api/complaint', complaintRouter);
+app.use('/api', complaintRouter);
 app.use('/api/mechanic', mechanicRouter);
 app.use('/api/vehicle', vehicleRouter);
 app.use('/api/seller', sellerRouter);
@@ -43,4 +44,5 @@ app.use('/api/bidder', bidderRouter);
 app.use('/api/login',LoginRouter);
 app.use('/api/logout',LogoutRouter);
 app.use('/static',express.static("public"))
+job.start()
 module.exports = app;

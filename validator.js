@@ -21,9 +21,17 @@ const reportValidationRules = () => {
 
 const postComplaintValidationRules = () => {
     return[
-        body('description')
+        body('name')
             .exists()
-            .withMessage('Description is required'),
+            .withMessage('Complaint name/subject is required')
+            .notEmpty()
+            .withMessage('Complaint name/subject should not be empty'),
+
+        body('complaint')
+            .exists()
+            .withMessage('Description of complaint is required')
+            .notEmpty()
+            .withMessage('Description of complaint should not be empty'),
 
         body('UserCNIC')
             .exists()
@@ -33,17 +41,17 @@ const postComplaintValidationRules = () => {
     ];
 };
 
-const putComplaintValidationRules = () => {
-    return[
-        param('complaintId')
-            .isInt()
-            .withMessage('Invalid Route Parameter'),
+// const putComplaintValidationRules = () => {
+//     return[
+//         param('complaintId')
+//             .isInt()
+//             .withMessage('Invalid Route Parameter'),
         
-        body('description')
-            .exists()
-            .withMessage('Description is required'),
-    ];
-};
+//         body('description')
+//             .exists()
+//             .withMessage('Description is required'),
+//     ];
+// };
 
 const validate = (req, res, next) => {
     const errors = validationResult(req);
@@ -59,5 +67,5 @@ const validate = (req, res, next) => {
 };
 
 module.exports = {
-    reportValidationRules, postComplaintValidationRules, putComplaintValidationRules, validate
+    reportValidationRules, postComplaintValidationRules, validate
 };

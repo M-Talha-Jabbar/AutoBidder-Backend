@@ -287,5 +287,63 @@ class Auction {
         }
 
     }
+    async updateStatus(status,auctionId){
+        const query = `UPDATE auctions SET status="${status}"WHERE ID IN (${[...auctionId]});`
+        console.log(query)
+        var dbCon, ExeQuery;
+        try {
+
+            try {
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch (err) {
+                console.log("not connected :", err)
+            }
+            const res = await ExeQuery(query);
+            console.log(res.affectedRows)
+            if (res.affectedRows === 0)
+                return false;
+            else
+                return true ;
+
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            dbCon.release();
+        }
+
+    }
+    async getWinner(){
+        const query = `SELECT a.Id,a.auc_vehicle as car,b.full_name,b.email,a.closing_bid as amt,b.contact_no FROM auctions as a JOIN (SELECT * FROM bidders as b JOIN users as u ON(b.UserCNIC=u.CNIC))as b ON(a.ID=b.AuctionID) WHERE a.auc_winner=b.ID and a.status="undefined";`
+        console.log(query)
+        var dbCon, ExeQuery;
+        try {
+
+            try {
+                const connection = await connectDB();
+                dbCon = connection.con;
+                ExeQuery = connection.ExeQuery;
+            }
+            catch (err) {
+                console.log("not connected :", err)
+            }
+            const res = await ExeQuery(query);
+            console.log(res.length)
+            if (res.length === 0)
+                return false;
+            else
+                return res ;
+
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            dbCon.release();
+        }
+
+    }
 }
 module.exports = Auction;

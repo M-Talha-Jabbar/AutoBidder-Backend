@@ -46,7 +46,7 @@ const getSellerInfo = (AuctionID) => new Promise((resolve, reject) => {
             console.log('Connection got: ', connection.threadId);
 
             connection.query(
-                'Select u.full_name FROM auctions a INNER JOIN sellers s ON a.sellerID = s.ID and a.ID = ? INNER JOIN users u ON s.UserCNIC = u.CNIC',
+                'Select u.full_name,u.contact_no,u.email FROM auctions a INNER JOIN sellers s ON a.sellerID = s.ID and a.ID = ? INNER JOIN users u ON s.UserCNIC = u.CNIC',
                  [AuctionID], (err, res) => {
 
                 if(err){
@@ -72,5 +72,5 @@ const seller_info = (req, res) => {
 };
 
 module.exports = {
-    seller_history, seller_info
+    seller_history, seller_info,getSellerInfo
 };
