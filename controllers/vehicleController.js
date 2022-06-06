@@ -110,7 +110,7 @@ function registerCar(req,res,next){
                 query, (err, result) => {
 
                 if(err){
-                    throw err;
+                    res.status(402).json("You have already registered a car with same license number ");
                 }
 
                 else{
