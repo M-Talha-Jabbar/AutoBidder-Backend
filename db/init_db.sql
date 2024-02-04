@@ -1,6 +1,6 @@
 -- MariaDB dump 10.17  Distrib 10.4.14-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: car_tijarat
+-- Host: localhost    Database: AutoBidder
 -- ------------------------------------------------------
 -- Server version	10.4.14-MariaDB
 
