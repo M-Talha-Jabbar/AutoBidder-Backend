@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var mysql = require('mysql2');
 const util=require('util');
 const test={
   host: process.env.MYSQL_HOSTNAME,

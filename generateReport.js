@@ -7,7 +7,7 @@ async function createPDF(data) {
   doc.pipe(fs.createWriteStream(`./public/reports/${data.regNo}.pdf`));
   doc.on("pageAdded",()=>{
     let fontSize=doc._fontSize;
-    doc.fontSize(11).font("Helvetica-Bold").fillColor("teal").text("Car Tijarat\u00AE",100,5,{align:"right"});
+    doc.fontSize(11).font("Helvetica-Bold").fillColor("teal").text("AutoBidder\u00AE",100,5,{align:"right"});
     doc.fontSize(fontSize).font(doc._font.name).fillColor("black");
     doc.moveDown()
   })
@@ -15,7 +15,7 @@ async function createPDF(data) {
   doc.circle(320,325,130).fill("white");
   doc
     .fontSize(25).fillColor("white")
-    .text('Car Tijarat\nCar Condition Report', 100, 100,{align:"center",underline:true,backgroundColor:"blue"});
+    .text('AutoBidder\nCar Condition Report', 100, 100,{align:"center",underline:true,backgroundColor:"blue"});
     doc.fontSize(16).fillColor("black").text("Car Registeration # "+data.regNo,100,300,{align:"center",})
     doc.fontSize(16).text("Mechanic Name :"+data.mechanicName,{align:"center",})
     doc.fontSize(16).text("Mechanic contact# "+data.mechanicPhone,{align:"center",})

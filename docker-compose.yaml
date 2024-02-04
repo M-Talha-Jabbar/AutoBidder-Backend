@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+
+  # the docker-compose will create the image with the name 'car-tijarat-backend_db' (rootFolderName_serviceName) for db service/project.
+  db:
+    build: ./db
+    container_name: car_tijarat_db
+    
+    environment:
+      #MYSQL_ROOT_PASSWORD: '' # If we want to set empty password then MYSQL_ROOT_PASSWORD environment variable will not work.
+      # Instead we would have to use:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+
+      MYSQL_DATABASE: car_tijarat # this allows you to specify the name of a database to be created on image startup or when the container start.
+    #ports:
+    #  - "3306:3306" # after container starts, use any MySQL Client like Dbeaver to connect to localhost port 3306 to get connected to mysql running in container on port 3306.
+    restart: always # configures restart policy: https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy
+
+  # similarly the docker-compose will create the image with the name 'car-tijarat-backend_api' for this service/project.
+  api:
+    depends_on: # this will make sure that 'db' container which is 'car_tijarat_db' starts before 'api' container which is 'car_tijarat_api'. 
+      - db
+    build: .
+    container_name: car_tijarat_api
+    env_file: ./.env
+    environment: # environment variables for 'api' service
+      # Format 1: - name=value
+      # Format 2: name: value
+      # We will be using format 2.
+
+      MYSQL_HOST: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+      MYSQL_DATABASE: car_tijarat
+      MYSQL_PORT: 3306
+
+      JWT_KEY: ${JWT_KEY} # '$' means the key in the .env file. Also note that .env file must be present in the same directory as docker-compose.yaml file.
+      PORT: 5000
+      interfaceURL: http://localhost:3000
+    ports:
+      - "5000:5000"
+    restart: on-failure

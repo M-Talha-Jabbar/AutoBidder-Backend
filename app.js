@@ -1,4 +1,5 @@
-require("dotenv").config();
+require("dotenv").config({path: '../.env'});
+//console.log(require("dotenv").config({path: '../.env'}));
 const {job}=require("./utils")
 var express = require('express');
 var path = require('path');

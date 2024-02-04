@@ -100,7 +100,7 @@ const sendEmail=async (email,content)=>{
       var mailOptions = {
         from:process.env.appEmail,
         to: [email,"k180224@nu.edu.pk"],
-        subject: 'Car Tijarat Auction Update',
+        subject: 'AutoBidder Auction Update',
         html:content
       };
       
