@@ -22,3 +22,7 @@ This repository contains the backend for **AutoBidder**, a real-time automobile 
 ## 🔗 Frontend Repository
 The frontend for this project is available here:  
 👉 [AutoBidder – Frontend](https://github.com/M-Talha-Jabbar/AutoBidder-UI)
+
+## ER Diagram
+![image](https://github.com/user-attachments/assets/85f3efd0-6bad-4043-9b4e-b709b40b7bd5)
+
