@@ -1,6 +1,6 @@
 # AutoBidder – Backend
 
-This repository contains the backend for **AutoBidder**, a real-time automobile auction system powering vehicle listings, live bidding, seller/buyer flows, and auction lifecycle automation.
+This repository contains the backend for **AutoBidder**, a real-time **vehicle auction platform** enabling vehicle listings, live bidding, seller/buyer flows, and complete auction lifecycle automation.
 
 ## ⚙️ Core Features
 - RESTful APIs for users, auctions, vehicles, membership, complaints, and bidding
