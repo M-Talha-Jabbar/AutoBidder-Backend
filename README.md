@@ -16,8 +16,7 @@ This repository contains the backend for **AutoBidder**, a real-time **vehicle a
 - Express.js
 - Socket.IO
 - MySQL
-- Sequelize ORM 
-- JWT Authentication
+- Sequelize ORM
 
 ## 🔗 Frontend Repository
 The frontend for this project is available here:  
